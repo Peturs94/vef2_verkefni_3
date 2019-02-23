@@ -16,3 +16,135 @@ html { /* stylelint-disable-line */
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
 }
+
+input,
+select,
+textarea,
+button {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}
+
+h1, h2 {
+  margin-bottom: 1rem;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+main {
+  margin: 2rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.field label {
+  font-size: 1.375rem;
+}
+
+.field input,
+.field textarea {
+  padding: 8px;
+  max-width: 800px;
+
+  border: 1px solid #888;
+  border-radius: 3px;
+}
+
+.field textarea {
+  flex: 1;
+  min-height: 6rem;
+}
+
+.field--invalid input,
+.field--invalid textarea {
+  border-color: #855;
+  background-color: #fbb;
+}
+
+.field--radio {
+  margin-left: -1rem;
+  padding: 1rem;
+}
+
+.field--radio label {
+  flex: initial;
+  align-items: center;
+  display: flex;
+}
+
+.field--radio.field--invalid {
+  background-color: #fbb;
+}
+
+.field--radio input {
+  margin-right: 1rem;
+}
+
+button {
+  border: 1px solid #888;
+  border-radius: 3px;
+  padding: 0.5rem;
+  background-color: #fff;
+  transition: background-color ease-in 300ms;
+}
+
+button:hover {
+  background-color: #bbb;
+}
+
+.infoButtons {
+  color: black;
+  padding: 0.5rem;
+}
+
+.errors {
+  margin-bottom: 2rem;
+}
+
+.application {
+  max-width: 60rem;
+  margin-bottom: 3rem;
+}
+
+.application h2 {
+  margin-bottom: 0;
+}
+
+.application .text {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.application .actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+@media (min-width: 600px) {
+  .field {
+    flex-direction: row;
+  }
+
+  .field label {
+    flex: 0 0 200px;
+  }
+
+  .field--radio label {
+    flex: initial;
+  }
+
+  .field input {
+    flex: 1;
+  }
+}

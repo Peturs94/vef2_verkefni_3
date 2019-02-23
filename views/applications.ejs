@@ -1,0 +1,41 @@
+<%- include('header') -%>
+
+<h1>Atvinnuumsóknir</h1>
+
+<div class="applications">
+  <% if (list.length === 0) { %>
+    <p>Engar umsóknir.</p>
+  <% } %>
+
+  <% list.forEach((application) => { %>
+    <div class="application">
+      <h2><%= application.name %></h2>
+      <p><a href="mailto:<%= application.email %>"><%= application.email %></a></p>
+      <p>Sími: <%= application.phone %></p>
+      <p>Umsókn send: <%= application.created.toISOString() %></p>
+      <p class="text"><%= application.text %></p>
+
+      <div class="actions">
+        <div class="process">
+          <% if (application.processed) { %>
+            ✓ Umsókn unnin <%= application.updated.toISOString() %>
+          <% } else { %>
+            <form method="post" action="/applications/process">
+              <input type="hidden" name="id" value="<%= application.id %>">
+              <button>Vinna umsókn</button>
+            </form>
+          <% } %>
+        </div>
+        <div class="delete">
+          <form method="post" action="/applications/delete">
+            <input type="hidden" name="id" value="<%= application.id %>">
+            <button>Eyða umsókn</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+</div>
+
+
+<%- include('footer') -%>

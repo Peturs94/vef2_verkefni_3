@@ -1,5 +1,9 @@
 <%- include('header') -%>
 
+<a href="/" class="infoButtons">Atvinnuumsókn</a>
+<a href="/login" class="infoButtons">Innskráning</a>
+<a href="/register" class="infoButtons">Nýskráning</a>
+
 <h1>Atvinnuumsókn</h1>
 
 <form method="post" action="/">
@@ -40,7 +44,7 @@
     </ul>
   <% } %>
 
-  <button>Senda umsókn</button>
+  <button type="submit" class="submitAppli">Senda umsókn</button>
 </form>
 
 <%- include('footer') -%>

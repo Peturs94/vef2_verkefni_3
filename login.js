@@ -3,7 +3,7 @@ const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const { sanitize } = require('express-validator/filter');
 
-const { insert2 } = require('./db');
+const { insert } = require('./db');
 
 /**
  * Higher-order fall sem umlykur async middleware með villumeðhöndlun.
@@ -41,48 +41,22 @@ const router = express.Router();
 
 // Fylki af öllum validations fyrir umsókn
 const validations = [
-    check('name')
-      .isLength({ min: 1 })
-      .withMessage('Nafn má ekki vera tómt'),
-  
-    check('email')
-      .isLength({ min: 1 })
-      .withMessage('Netfang má ekki vera tómt'),
-  
-    check('email')
-      .isEmail()
-      .withMessage('Netfang verður að vera netfang'),
+  check('username')
+    .isLength({ min: 1 })
+    .withMessage('Nafn má ekki vera tómt'),
 
-    check('username')
-      .isLength({ min: 1})
-      .withMessage('Notendanafn má ekki vera tómt'),
-  
-    check('password')
-      .isLength({ min: 8 })
-      .withMessage('lykilorð þarf að vera minnst 8 stafir'),
+  check('password')
+    .withMessage('Rangt lykilorð'),
+];
 
-    check('password2')
-      // checka hvort það passar við fyrsta password
-      .withMessage('lykilorð þarf að vera eins'),
-  ];
-  
-  // Fylki af öllum hreinsunum fyrir umsókn
-  const sanitazions = [
-    sanitize('name').trim().escape(),
-    sanitizeXss('name'),
-  
-    sanitizeXss('email'),
-    sanitize('email').trim().normalizeEmail(),
-  
-    sanitizeXss('username'),
-    sanitize('username').trim().escape(),
+// Fylki af öllum hreinsunum fyrir umsókn
+const sanitazions = [
+  sanitize('username').trim().escape(),
+  sanitizeXss('username'),
 
-    sanitizeXss('password'),
-    sanitize('password').trim().escape(),
-
-    sanitizeXss('password2'),
-    sanitize('password2').trim().escape(),
-  ];
+  sanitizeXss('password'),
+  sanitize('password').trim().normalizeEmail(),
+];
 
 /**
  * Route handler fyrir form umsóknar.
@@ -91,18 +65,15 @@ const validations = [
  * @param {object} res Response hlutur
  * @returns {string} Formi fyrir umsókn
  */
-function register(req, res) {
+function login(req, res) {
   const data = {
-    title: 'Nýskráning',
-    name: '',
-    email: '',
+    title: 'Innskráning',
     username: '',
     password: '',
-    password2: '',
     errors: [],
-    page: 'register',
+    page: 'login',
   };
-  res.render('register', data);
+  res.render('login', data);
 }
 
 /**
@@ -119,20 +90,14 @@ function register(req, res) {
 function showErrors(req, res, next) {
     const {
         body:{
-            name = '',
-            email= '',
             username = '',
             password = '',
-            password2 = '',
         } = {},
     } = req;
 
     const data = {
-        name,
-        email,
         username,
         password,
-        password2,
     };
 
     const validation = validationResult(req);
@@ -140,7 +105,7 @@ function showErrors(req, res, next) {
     if(!validation.isEmpty()) {
         const errors = validation.array();
         data.errors = errors;
-        data.title = 'Nýskráning - vandræði';
+        data.title = 'Innskráning - vandræði';
 
         return res.render('login', data);
     }
@@ -159,32 +124,26 @@ function showErrors(req, res, next) {
 async function formPost(req, res) {
     const {
         body:{
-            name = '',
-            email= '',
             username = '',
             password = '',
-            password2 = '',
         } = {},
     } = req;
 
     const data = {
-        name,
-        email,
         username,
         password,
-        password2,
     };
     
-    await insert2(data);
+    await insert(data);
 
-    return res.redirect('/login');
+    return res.redirect('/thanks');
 }
 
 function thanks(req, res) {
     return res.render('thanks', { title: 'Takk fyrir umsókn, skráðu þig inn'});
 }
 
-router.get('/', register);
+router.get('/', login);
 
 router.get('/thanks', thanks);
 

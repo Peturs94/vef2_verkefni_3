@@ -3,10 +3,18 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 
+const sessionSecret = require('express-session');
+const passport = require('passport');
+const { Strategy } = require('passport-local');
 const apply = require('./apply');
 const register = require('./register');
 const admin = require('./admin');
 const applications = require('./applications');
+const login = require('./login');
+
+
+
+
 
 /* todo sækja stillingar úr env */
 
@@ -20,6 +28,14 @@ const app = express();
 /* todo stilla session og passport */
 
 app.use(express.urlencoded({ extended: true }));
+
+//passport
+app.use(sessionSecret({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  maxAge: 20 * 1000,
+}));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
