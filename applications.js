@@ -1,6 +1,7 @@
 const express = require('express');
 
 const { select, update, deleteRow } = require('./db');
+const { ensureLoggedIn } = require('./utils');
 
 const router = express.Router();
 
@@ -24,12 +25,11 @@ function catchErrors(fn) {
 async function applications(req, res) {
   const list = await select();
 
-  const data = {
+  return res.render('applications', {
     title: 'Umsóknir',
     list,
-  };
-
-  return res.render('applications', data);
+    page: 'application' 
+  });
 }
 
 /**
@@ -62,7 +62,7 @@ async function deleteApplication(req, res) {
   return res.redirect('/applications');
 }
 
-router.get('/', catchErrors(applications));
+router.get('/', ensureLoggedIn, catchErrors(applications));
 router.post('/process', catchErrors(processApplication));
 router.post('/delete', catchErrors(deleteApplication));
 

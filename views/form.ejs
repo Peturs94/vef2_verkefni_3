@@ -1,50 +1,46 @@
 <%- include('header') -%>
 
-<a href="/" class="infoButtons">Atvinnuumsókn</a>
-<a href="/login" class="infoButtons">Innskráning</a>
-<a href="/register" class="infoButtons">Nýskráning</a>
-
 <h1>Atvinnuumsókn</h1>
 
 <form method="post" action="/">
-  <div class="field<%= locals.isInvalid('name', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('name', data.errors) ?  ' field--invalid' : '' %>">
     <label for="name">Nafn</label>
-    <input type="text" name="name" id="name" value="<%= name %>" class="">
+    <input type="text" name="name" id="name" value="<%= data.name %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('email', data.errors) ?  ' field--invalid' : '' %>">
     <label for="email">Netfang</label>
-    <input type="text" name="email" id="email" value="<%= email %>" class="">
+    <input type="text" name="email" id="email" value="<%= data.email %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('phone', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('phone', data.errors) ?  ' field--invalid' : '' %>">
     <label for="phone">Sími</label>
-    <input type="text" name="phone" id="phone" value="<%= phone %>" class="">
+    <input type="text" name="phone" id="phone" value="<%= data.phone %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('text', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('text', data.errors) ?  ' field--invalid' : '' %>">
     <label for="text">Kynning á þér:</label>
-    <textarea name="text" id="text"><%= text %></textarea>
+    <textarea name="text" id="text"><%= data.text %></textarea>
   </div>
 
   <h2>Starf sem sótt er um:</h2>
-  <div class="field field--radio<%= locals.isInvalid('job', errors) ?  ' field--invalid' : '' %>">
-    <label><input type="radio" name="job" value="forritari" <%= job === 'forritari' ? 'checked' : '' %>> Forritari</label>
+  <div class="field field--radio<%= locals.isInvalid('job', data.errors) ?  ' field--invalid' : '' %>">
+    <label><input type="radio" name="job" value="forritari" <%= data.job === 'forritari' ? 'checked' : '' %>> Forritari</label>
   </div>
-  <div class="field field--radio<%= locals.isInvalid('job', errors) ?  ' field--invalid' : '' %>">
-    <label><input type="radio" name="job" value="hönnuður" <%= job === 'hönnuður' ? 'checked' : '' %>> Hönnuður</label>
+  <div class="field field--radio<%= locals.isInvalid('job', data.errors) ?  ' field--invalid' : '' %>">
+    <label><input type="radio" name="job" value="hönnuður" <%= data.job === 'hönnuður' ? 'checked' : '' %>> Hönnuður</label>
   </div>
-  <div class="field field--radio<%= locals.isInvalid('job', errors) ?  ' field--invalid' : '' %>">
-    <label><input type="radio" name="job" value="verkefnastjóri" <%= job === 'verkefnastjóri' ? 'checked' : '' %>> Verkefnastjóri</label>
+  <div class="field field--radio<%= locals.isInvalid('job', data.errors) ?  ' field--invalid' : '' %>">
+    <label><input type="radio" name="job" value="verkefnastjóri" <%= data.job === 'verkefnastjóri' ? 'checked' : '' %>> Verkefnastjóri</label>
   </div>
 
-  <% if (errors.length > 0) { %>
+  <% if (data.errors.length > 0) { %>
     <h2>Vandræði við að senda umsókn:</h2>
     <ul class="errors">
-      <% errors.forEach((error) => { %>
+      <% data.errors.forEach((error) => { %>
         <li class="error"><label for="<%= error.param %>"><%= error.msg %></label></li>
       <% }); %>
     </ul>
   <% } %>
 
-  <button type="submit" class="submitAppli">Senda umsókn</button>
+  <button>Senda umsókn</button>
 </form>
 
 <%- include('footer') -%>

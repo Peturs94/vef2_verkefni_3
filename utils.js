@@ -10,6 +10,14 @@ function catchErrors(fn) {
 
 /* todo bæta við fleiri hjálparföllum */
 
+function ensureLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.redirect('/login');
+}
+
 module.exports = {
   catchErrors,
+  ensureLoggedIn,
 };

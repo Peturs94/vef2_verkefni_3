@@ -101,11 +101,6 @@ button:hover {
   background-color: #bbb;
 }
 
-.infoButtons {
-  color: black;
-  padding: 0.5rem;
-}
-
 .errors {
   margin-bottom: 2rem;
 }
@@ -130,6 +125,56 @@ button:hover {
   align-items: center;
 }
 
+.users {
+  display: flex;
+  margin-bottom: 1rem;
+  min-width: 100%;
+  padding: 10px;
+}
+
+.userHead, .userInfo {
+  min-width: 33.333%;
+}
+
+.adminUserHead, .adminUserInfo {
+  min-width: 25%;
+}
+
+.userHead, .adminUserHead {
+  font-weight: bold;
+}
+
+.users:nth-child(2n){
+  background-color: #bbb;
+}
+
+.admin{
+  overflow: auto;
+}
+
+.page, .thisPage, .logOut {
+  text-decoration: none;
+  color: black;
+  padding-right: 24px;
+}
+
+.logOut {
+  font-weight: bold;
+}
+
+.logOut:hover {
+  text-decoration: underline;
+}
+
+.thisPage {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.titles {
+  padding-bottom: 22px;
+}
+
 
 @media (min-width: 600px) {
   .field {
@@ -147,4 +192,14 @@ button:hover {
   .field input {
     flex: 1;
   }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .titles {
+    padding-bottom: 48px;
+  }
+
 }

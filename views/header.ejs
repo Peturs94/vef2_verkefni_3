@@ -13,3 +13,23 @@
 
     </header>
     <main>
+      <div class= "header">
+        <% if (locals.user){ %>
+          <div class="titles">
+            <a class="<%= page === 'apply'? 'thisPage':'page'%>" href="./">Atvinnuumsókn</a>
+            <a class="<%= page === 'application'? 'thisPage':'page'%>" href="./applications">Umsóknir</a>
+            <a class="<%= page === 'admin'? 'thisPage':'page'%>" href="./admin">Notendur</a>
+          </div>
+          <div>
+            <p><%- locals.user.username %></p>
+            <a class='logOut' href="./logout">Útskrá</a>
+          </div>
+        <% } else { %>
+          <div class="titles">
+            <a class="<%= page === 'apply'? 'thisPage':'page'%>" href="../">Atvinnuumsókn</a>
+            <a class="<%= page === 'applications'? 'thisPage':'page'%>" href="../login">Innskráning</a>
+            <a class="<%= page === 'register'? 'thisPage':'page'%>" href="../register">Nýskráning</a>
+          </div>
+        <% } %>
+      </div>
+      

@@ -1,43 +1,39 @@
 <%- include('header') -%>
 
-<a href="/" class="infoButtons">Atvinnuumsókn</a>
-<a href="/login" class="infoButtons">Innskráning</a>
-<a href="/register" class="infoButtons">Nýskráning</a>
-
 <h1>Nýskráning</h1>
 
 <form method="post" action="/register">
-  <div class="field<%= locals.isInvalid('name', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('name', data.errors) ?  ' field--invalid' : '' %>">
     <label for="name">Nafn</label>
-    <input type="text" name="name" id="name" value="<%= name %>" class="">
+    <input type="text" name="name" id="name" value="<%= data.name %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('email', data.errors) ?  ' field--invalid' : '' %>">
     <label for="email">Netfang</label>
-    <input type="text" name="email" id="email" value="<%= email %>" class="">
+    <input type="text" name="email" id="email" value="<%= data.email %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('username', errors) ?  ' field--invalid' : '' %>">
+  <div class="field<%= locals.isInvalid('username', data.errors) ?  ' field--invalid' : '' %>">
     <label for="username">Notendanafn</label>
-    <input type="text" name="username" id="username" value="<%= username %>" class="">
+    <input type="text" name="username" id="username" value="<%= data.username %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('password', errors) ?  ' field--invalid' : '' %>">
-    <label for="password">Lykilorð</label>
-    <input type="text" name="password" id="password" value="<%= password %>" class="">
+  <div class="field<%= locals.isInvalid('password1', data.errors) ?  ' field--invalid' : '' %>">
+    <label for="password1">Lykilorð</label>
+    <input type="password" name="password1" id="password1" value="<%= data.password1 %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('password2', errors) ?  ' field--invalid' : '' %>">
-    <label for="password2">Lykilorð, aftur:</label>
-    <input type="text" name="password2" id="password2" value="<%= password2 %>" class="">
-    </div>
+  <div class="field<%= locals.isInvalid('password2', data.errors) ?  ' field--invalid' : '' %>">
+    <label for="password2">Lykilorð</label>
+    <input type="password" name="password2" id="password2" value="<%= data.password2 %>" class="">
+  </div>
 
-  <% if (errors.length > 0) { %>
-    <h2>Vandræði við að skrá notanda:</h2>
+  <% if (data.errors.length > 0) { %>
+    <h2>Vandræði við að senda umsókn:</h2>
     <ul class="errors">
-      <% errors.forEach((error) => { %>
+      <% data.errors.forEach((error) => { %>
         <li class="error"><label for="<%= error.param %>"><%= error.msg %></label></li>
       <% }); %>
     </ul>
   <% } %>
 
-  <button type="submit" class="submitReg">Skrá notanda</button>
+  <button>Skrá notenda</button>
 </form>
 
 <%- include('footer') -%>

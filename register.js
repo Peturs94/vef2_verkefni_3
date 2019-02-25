@@ -3,7 +3,7 @@ const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const { sanitize } = require('express-validator/filter');
 
-const { insert2 } = require('./db');
+const { insert, query  } = require('./users');
 
 /**
  * Higher-order fall sem umlykur async middleware með villumeðhöndlun.
@@ -39,6 +39,22 @@ function sanitizeXss(fieldName) {
 
 const router = express.Router();
 
+function findUser(user) {
+  const q = 'SELECT * FROM users WHERE username = $1';
+  return query(q, [user]);
+}
+
+const sanitazions = [
+  sanitize('name').trim().escape(),
+  sanitizeXss('name'),
+
+  sanitizeXss('email'),
+  sanitize('email').trim().normalizeEmail(),
+
+  sanitizeXss('username'),
+  sanitize('username').trim().escape(),
+];
+
 // Fylki af öllum validations fyrir umsókn
 const validations = [
     check('name')
@@ -56,33 +72,28 @@ const validations = [
     check('username')
       .isLength({ min: 1})
       .withMessage('Notendanafn má ekki vera tómt'),
+
+    check('username')
+      .custom(async (val) => {
+        const result = await findUser(val);
+        return result.rowCount === 0;
+      }).withMessage('Notendanafn núþegar til'),  
   
-    check('password')
+    check('password1')
       .isLength({ min: 8 })
       .withMessage('lykilorð þarf að vera minnst 8 stafir'),
 
     check('password2')
-      // checka hvort það passar við fyrsta password
-      .withMessage('lykilorð þarf að vera eins'),
+      .isLength({ min: 8 })
+      .withMessage('lykilorð þarf að vera minnst 8 stafir'),
+
+    check('password1')
+      .custom((val, { req }) => val === req.body.password2)
+      .withMessage('lykilorð verða að vera eins'),
   ];
   
   // Fylki af öllum hreinsunum fyrir umsókn
-  const sanitazions = [
-    sanitize('name').trim().escape(),
-    sanitizeXss('name'),
-  
-    sanitizeXss('email'),
-    sanitize('email').trim().normalizeEmail(),
-  
-    sanitizeXss('username'),
-    sanitize('username').trim().escape(),
 
-    sanitizeXss('password'),
-    sanitize('password').trim().escape(),
-
-    sanitizeXss('password2'),
-    sanitize('password2').trim().escape(),
-  ];
 
 /**
  * Route handler fyrir form umsóknar.
@@ -97,8 +108,9 @@ function register(req, res) {
     name: '',
     email: '',
     username: '',
-    password: '',
+    password1: '',
     password2: '',
+    admin: false,
     errors: [],
     page: 'register',
   };
@@ -122,8 +134,9 @@ function showErrors(req, res, next) {
             name = '',
             email= '',
             username = '',
-            password = '',
+            password1 = '',
             password2 = '',
+            admin = false,
         } = {},
     } = req;
 
@@ -131,8 +144,9 @@ function showErrors(req, res, next) {
         name,
         email,
         username,
-        password,
+        password1,
         password2,
+        admin,
     };
 
     const validation = validationResult(req);
@@ -162,8 +176,9 @@ async function formPost(req, res) {
             name = '',
             email= '',
             username = '',
-            password = '',
+            password1 = '',
             password2 = '',
+            admin = false,
         } = {},
     } = req;
 
@@ -171,13 +186,14 @@ async function formPost(req, res) {
         name,
         email,
         username,
-        password,
+        password1,
         password2,
+        admin,
     };
     
-    await insert2(data);
+    await insert(data);
 
-    return res.redirect('/login');
+    return res.redirect('/register/thanks');
 }
 
 function thanks(req, res) {

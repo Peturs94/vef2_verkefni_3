@@ -14,7 +14,6 @@
       <p>Sími: <%= application.phone %></p>
       <p>Umsókn send: <%= application.created.toISOString() %></p>
       <p class="text"><%= application.text %></p>
-
       <div class="actions">
         <div class="process">
           <% if (application.processed) { %>
@@ -26,16 +25,15 @@
             </form>
           <% } %>
         </div>
-        <div class="delete">
-          <form method="post" action="/applications/delete">
-            <input type="hidden" name="id" value="<%= application.id %>">
-            <button>Eyða umsókn</button>
-          </form>
-        </div>
+        <% if (locals.isAdmin) { %>
+          <div class="delete">
+            <form method="post" action="/applications/delete">
+              <input type="hidden" name="id" value="<%= application.id %>">
+              <button>Eyða umsókn</button>
+            </form>
+          </div>
+        <% } %>
       </div>
     </div>
   <% }); %>
 </div>
-
-
-<%- include('footer') -%>

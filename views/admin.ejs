@@ -1,0 +1,42 @@
+<%- include('header') -%>
+
+<h1>Nýskráning tókst</h1>
+
+<% if (locals.isAdmin){ %>
+  <form method="post" action="/admin">
+    <div class="admin">
+      <div class = users>
+        <div class="adminUserHead"><p>Stjórnandi</p></div>
+        <div class="adminUserHead"><p>Notendanafn</p></div>
+        <div class="adminUserHead"><p>Nafn</p></div>
+        <div class="adminUserHead"><p>Netfang</p></div>
+      </div>
+      <% list.forEach((userInfo) => { %>
+        <div class="users">
+            <div class="adminUserInfo"><input type="checkbox" value="<%- userInfo.username %>" name="admin" <%= userInfo.admin === true ? 'checked' : '' %>></div>
+            <div class="adminUserInfo"><p><%= userInfo.username %></p></div>
+            <div class="adminUserInfo"><p><%= userInfo.name %></p></div>
+            <div class="adminUserInfo"><p><%= userInfo.email %></p></div>
+        </div>
+        <% }); %>
+    </div>
+    <button>Uppfæra stjórnendur</button>
+  </form>
+<% } else { %>
+  <div class="admin">
+    <div class = users>
+      <div class="userHead"><p>Notendanafn</p></div>
+      <div class="userHead"><p>Nafn</p></div>
+      <div class="userHead"><p>Netfang</p></div>
+    </div>
+    <% list.forEach((userInfo) => { %>
+      <div class="users">
+        <div class="userInfo"><p><%= userInfo.username %></p></div>
+        <div class="userInfo"><p><%= userInfo.name %></p></div>
+        <div class="userInfo"><p><%= userInfo.email %></p></div>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('footer') -%>

@@ -1,23 +1,19 @@
 <%- include('header') -%>
 
-<a href="/" class="infoButtons">Atvinnuumsókn</a>
-<a href="/login" class="infoButtons">Innskráning</a>
-<a href="/register" class="infoButtons">Nýskráning</a>
-
-<h1>Nýskráning</h1>
+<h1>Innskráning</h1>
 
 <form method="post" action="/login">
-  <div class="field<%= locals.isInvalid('username', errors) ?  ' field--invalid' : '' %>">
+  <div class="field">
     <label for="username">Notendanafn</label>
     <input type="text" name="username" id="username" value="<%= username %>" class="">
   </div>
-  <div class="field<%= locals.isInvalid('password', errors) ?  ' field--invalid' : '' %>">
+  <div class="field">
     <label for="password">Lykilorð</label>
-    <input type="text" name="password" id="password" value="<%= password %>" class="">
+    <input type="password" name="password" id="password" value="<%= password %>" class="">
   </div>
 
   <% if (errors.length > 0) { %>
-    <h2>Vandræði við innskráningu:</h2>
+    <h2>Vandræði við að senda umsókn:</h2>
     <ul class="errors">
       <% errors.forEach((error) => { %>
         <li class="error"><label for="<%= error.param %>"><%= error.msg %></label></li>
@@ -25,7 +21,7 @@
     </ul>
   <% } %>
 
-  <button type="submit" class="submitUser">Innskrá</button>
+  <button>login</button>
 </form>
 
 <%- include('footer') -%>
