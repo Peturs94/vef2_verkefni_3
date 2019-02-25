@@ -12,6 +12,7 @@ const apply = require('./apply');
 const register = require('./register');
 const admin = require('./admin');
 const applications = require('./applications');
+
 const sessionSecret = process.env.SESSION_SECRET;
 
 if (!sessionSecret) {
@@ -59,7 +60,7 @@ function thanksApplication(req, res) {
     title: 'Takk fyrir umsókn',
     thanksTitle: 'Takk fyrir umsóknina',
     thanksText: 'Við munum hafa samband í nánustu framtíð',
-    page: 'thanks'
+    page: 'thanks',
   });
 }
 
@@ -67,12 +68,12 @@ function thanksApplication(req, res) {
 
 async function start(username, password, done) {
   try {
-    const user = await users.findByUsername(username);
+    const user = await users.findUsername(username);
     if (!user) {
       return done(null, false);
     }
 
-    const result = await users.comparePassword(password, user);
+    const result = await users.comparePw(password, user);
     return done(null, result);
   } catch (err) {
     console.log(err);  // eslint-disable-line
@@ -107,6 +108,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/', apply);
 
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
@@ -143,7 +145,7 @@ app.get('/logout', (req, res) => {
 
 app.use('/thanks', thanksApplication);
 
-app.use('/', apply);
+
 app.use('/register', register);
 app.use('/applications', applications);
 app.use('/admin', admin);

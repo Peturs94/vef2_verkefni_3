@@ -23,11 +23,11 @@ async function query(q, values = []) {
 async function insert(data) {
   const hashedPassword = await bcrypt.hash(data.password, sessionSecret);
   const q = `
-INSERT INTO applications
-(name, email, phone, text, job)
-VALUES
-($1, $2, $3, $4, $5)`;
-  const values = [data.name, data.email, data.phone, data.text, data.job];
+  INSERT INTO applications
+  (username, password, name, email, admin)
+  VALUES
+  ($1, $2, $3, $4, $5)`;
+  const values = [data.username, hashedPassword, data.name, data.email, data.job];
 
   return query(q, values);
 }
@@ -54,48 +54,47 @@ async function deleteRow(id) {
 }
 
 async function findUsername(username) {
-    const q = 'SELECT * FROM users WHERE username = $1';
-    const result = await query(q, [username]);
-
-    if(result.rows.length > 0) {
-        const found = result.rows[0];
-        return Promise.resolve(found);
-    }
-    return Promise.resolve(null);
+  const q = 'SELECT * FROM users WHERE username = $1';
+  const result = await query(q, [username]);
+  if (result.rows.length > 0) {
+    const found = result.rows[0];
+    return Promise.resolve(found);
+  }
+  return Promise.resolve(null);
 }
 
 async function comparePw(password, user) {
-    const ok = await bcrypt.compare(password, user.password);
+  const ok = await bcrypt.compare(password, user.password);
 
-    if (ok) {
-        return user;
-    }
-    return false;
+  if (ok) {
+    return user;
+  }
+  return false;
 }
 
 async function findId(id) {
-    const q = 'SELECT * FROM users WHERE id = $1';
-    const result = await query(q, [username]);
+  const q = 'SELECT * FROM users WHERE id = $1';
+  const result = await query(q, [id]);
 
-    if(result.rows.length > 0) {
-        const found = result.rows[0];
-        return Promise.resolve(found);
-    }
-    return Promise.resolve(null);
+  if (result.rows.length > 0) {
+    const found = result.rows[0];
+    return Promise.resolve(found);
+  }
+  return Promise.resolve(null);
 }
 
 async function setAdminFalse() {
-    const q = `UPDATE users SET admin = false WHERE admin = true`;  // eslint-disable-line
-    const done = await query(q); // eslint-disable-line
+  const q = `UPDATE users SET admin = false WHERE admin = true`;  // eslint-disable-line
+  const done = await query(q); // eslint-disable-line
+}
+
+async function setAdmin(usernames) {
+  const q = 'UPDATE users SET admin = true WHERE username = $1';
+  for (let i=0; i<usernames.length; i++) {// eslint-disable-line
+    console.log('Notandi er admin: ' + usernames[i]);// eslint-disable-line
+    const result = await query(q, [usernames[i]]); // eslint-disable-line
   }
-  
-  async function setAdmin(usernames) {
-    const q = 'UPDATE users SET admin = true WHERE username = $1';
-    for (let i=0; i<usernames.length; i++) {// eslint-disable-line
-      console.log('Notandi er admin: ' + usernames[i]);
-      const result = await query(q, [usernames[i]]); // eslint-disable-line
-    }
-  }
+}
 
 module.exports = {
   query,
@@ -107,5 +106,5 @@ module.exports = {
   findUsername,
   findId,
   setAdmin,
-  setAdminFalse
+  setAdminFalse,
 };

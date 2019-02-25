@@ -95,16 +95,18 @@ const sanitazions = [
  */
 function form(req, res) {
   const data = {
-    title: 'Atvinnuumsókn',
     name: '',
     email: '',
     phone: '',
     text: '',
     job: '',
     errors: [],
-    page: 'apply',
   };
-  res.render('form', data);
+  res.render('form', {
+    title: 'Atvinnuumsókn',
+    data,
+    page: 'apply',
+  });
 }
 
 /**
@@ -140,9 +142,14 @@ function showErrors(req, res, next) {
   if (!validation.isEmpty()) {
     const errors = validation.array();
     data.errors = errors;
-    data.title = 'Avinnuumsókn – vandræði';
+    const title = 'Avinnuumsókn – vandræði';
 
-    return res.render('form', data);
+    return res.render('form', {
+      title,
+      data,
+      page: 'apply',
+      errors: []
+    });
   }
 
   return next();
@@ -186,7 +193,7 @@ async function formPost(req, res) {
  * @param {object} res Response hlutur
  */
 function thanks(req, res) {
-  return res.render('thanks', { title: 'Takk fyrir umsóknina' });
+  return res.render('thanks', { title: 'Takk fyrir umsóknina', thanksTitle: 'Takk fyrir umsóknina', thanksText: 'Við munum hafa samban innan skamms', page: 'thanks' });  // eslint-disable-line
 }
 
 router.get('/', form);
